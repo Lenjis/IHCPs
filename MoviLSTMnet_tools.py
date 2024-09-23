@@ -149,3 +149,5 @@ def plotModelHistoryFromFile(history_df, fig_initial_value=1, save_fig=False, fi
     #print("Columns:", keys)
     #for key in keys:
     #    print(f"{key}:", history_df[key].values)
+
+    
