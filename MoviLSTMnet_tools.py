@@ -20,11 +20,13 @@ def csv_generator(env_var):
 
         # Check if both input and output folders exist
         if os.path.isdir(input_folder) and os.path.isdir(output_folder):
-            data.append({
+            data.append(
+                {
                 'folder_name': folder_name,
                 'input_folder': input_folder,
                 'output_folder': output_folder
-            })
+                }
+            )
 
     # Convert the list to a DataFrame
     df = pd.DataFrame(data)
@@ -89,7 +91,7 @@ def cal_true_value(heatflux_type, **kwargs):
 
 
 # Function to plot model history from a DataFrame
-def plotModelHistoryFromFile(history_df, fig_initial_value=1, save_fig=False, file_name=None, fig_vars=None):
+def plotModelHistoryFromFile_MSE(history_df, fig_initial_value=1, save_fig=False, file_name=None, fig_vars=None):
     fig, ax = plt.subplots(1, 2, figsize=(15, 4))
 
     fontsize_label = 12
