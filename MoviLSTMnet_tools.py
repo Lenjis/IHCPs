@@ -152,4 +152,61 @@ def plotModelHistoryFromFile_MSE(history_df, fig_initial_value=1, save_fig=False
     #for key in keys:
     #    print(f"{key}:", history_df[key].values)
 
-    
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+from matplotlib.font_manager import FontProperties
+from matplotlib.ticker import AutoMinorLocator, LogLocator
+from matplotlib.ticker import ScalarFormatter, FormatStrFormatter
+
+# Define the path to the Times New Roman font on Windows
+font_properties = FontProperties(fname='C:\\Windows\\Fonts\\times.ttf')
+TICK_LABEL_SIZE = 16  # Increased tick label size
+
+# Update rcParams to use Times New Roman for all text elements
+rcParams['font.family'] = 'serif'
+rcParams['font.serif'] = ['Times New Roman'] + rcParams['font.serif']
+rcParams['mathtext.fontset'] = 'custom'
+rcParams['mathtext.rm'] = 'Times New Roman'
+
+
+save_path = 'E:\\Project\\cross-sectional project'
+
+def apply_plot_formatting(x_label=None, y_label=None, title=None):
+    plt.xlabel(x_label, fontsize=20)
+    plt.ylabel(y_label, fontsize=20)
+    if title:
+        plt.title(title, fontsize=20)
+    plt.legend(fontsize=16, 
+               frameon=True, 
+               framealpha=1, 
+               edgecolor='black', 
+               fancybox=False,
+               borderpad=0.3, labelspacing=0.2
+               )
+    plt.grid(which='both', linestyle='--', linewidth=1)  # Set grid lines to be dashed
+
+    # Set the linewidth of the x and y axes
+    plt.gca().spines['top'].set_linewidth(2)
+    plt.gca().spines['bottom'].set_linewidth(2)
+    plt.gca().spines['left'].set_linewidth(2)
+    plt.gca().spines['right'].set_linewidth(2)
+
+    # Enable minor ticks
+    plt.gca().minorticks_on()
+    # Automatically adjust minor ticks to have one minor tick between each pair of major ticks on x-axis
+    plt.gca().xaxis.set_minor_locator(AutoMinorLocator(2))
+
+
+    # Set minor ticks for y-axis on a logarithmic scale
+    plt.gca().yaxis.set_minor_locator(LogLocator(base=10.0, subs='auto', numticks=10))
+
+    # Set font properties for tick labels and make ticks inline
+    plt.gca().tick_params(axis='both', which='major', direction='in', length=6, width=1.5, pad=5)
+    plt.gca().tick_params(axis='both', which='minor', direction='in', length=3, width=1, pad=5)
+    plt.gca().tick_params(axis='x', which='both', top=True, bottom=True)
+    plt.gca().tick_params(axis='y', which='both', left=True, right=True)
+
+    for label in plt.gca().get_xticklabels() + plt.gca().get_yticklabels():
+        label.set_fontproperties(font_properties)
+        label.set_fontsize(TICK_LABEL_SIZE)  # Set the font size for tick labels
