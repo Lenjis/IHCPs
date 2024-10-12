@@ -160,7 +160,8 @@ from matplotlib.ticker import AutoMinorLocator, LogLocator
 from matplotlib.ticker import ScalarFormatter, FormatStrFormatter
 
 # Define the path to the Times New Roman font on Windows
-font_properties = FontProperties(fname='C:\\Windows\\Fonts\\times.ttf')
+#font_properties = FontProperties(fname='/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf')
+
 TICK_LABEL_SIZE = 16  # Increased tick label size
 
 # Update rcParams to use Times New Roman for all text elements
@@ -170,9 +171,13 @@ rcParams['mathtext.fontset'] = 'custom'
 rcParams['mathtext.rm'] = 'Times New Roman'
 
 
-save_path = 'E:\\Project\\cross-sectional project'
+#save_path = 'E:\\Project\\cross-sectional project'
 
-def apply_plot_formatting(x_label=None, y_label=None, title=None):
+def apply_plot_formatting(x_label='x', 
+                          y_label='y', 
+                          title='title', 
+                          font_properties=FontProperties(fname='/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf')
+                          ):
     plt.xlabel(x_label, fontsize=20)
     plt.ylabel(y_label, fontsize=20)
     if title:
