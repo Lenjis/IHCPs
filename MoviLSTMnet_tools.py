@@ -176,7 +176,7 @@ rcParams['mathtext.rm'] = 'Times New Roman'
 def apply_plot_formatting(x_label='x', 
                           y_label='y', 
                           title='title', 
-                          font_properties=FontProperties(fname='/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf')
+                          font_properties=FontProperties(fname='/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf') # type: ignore
                           ):
     plt.xlabel(x_label, fontsize=20)
     plt.ylabel(y_label, fontsize=20)
