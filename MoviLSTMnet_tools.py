@@ -34,9 +34,6 @@ def csv_generator(env_var):
     # Save the DataFrame to a CSV file
     df.to_csv(os.path.join(env_var, 'dataset_info.csv'), index=False)
 
-# Example usage:
-env_var = os.path.normpath('/home/linux/IHCPs/dataset_pm1000_sin')
-csv_generator(env_var)
 
 
 
