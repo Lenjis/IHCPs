@@ -3,38 +3,68 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import datetime
-
+import logging
 
 def csv_generator(env_var):
-    # Define the input and output paths
+    """
+    Generates a CSV file containing information about input and output folder pairs 
+    within a given environment directory. 
+
+    Args:
+        env_var (str): The base directory path containing 'input' and 'output' subdirectories.
+
+    Returns:
+        None. A CSV file named 'dataset_info.csv' will be created in the base directory.
+    """
+
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
+
+    # Define input and output directory paths
     input_path = os.path.join(env_var, 'input')
     output_path = os.path.join(env_var, 'output')
 
-    # Initialize the data list
-    data = []
+    # Check if both input and output paths exist
+    if not os.path.isdir(input_path) or not os.path.isdir(output_path):
+        logging.error("Either 'input' or 'output' directory does not exist.")
+        return
 
-    # Iterate over folders in the input path
+    data = []  # Initialize the data list to store folder details
+
+    # Iterate over folders in the input path, sorted for consistency
     for folder_name in sorted(os.listdir(input_path)):
         input_folder = os.path.join(input_path, folder_name)
         output_folder = os.path.join(output_path, folder_name)
 
-        # Check if both input and output folders exist
+        # Check if corresponding input and output folders exist
         if os.path.isdir(input_folder) and os.path.isdir(output_folder):
-            data.append(
-                {
+            logging.info(f"Processing folder: {folder_name}")
+            data.append({
                 'folder_name': folder_name,
                 'input_folder': input_folder,
                 'output_folder': output_folder
-                }
+            })
+        else:
+            logging.warning(
+                f"Skipping folder: {folder_name} - "
+                f"Missing corresponding input or output directory."
             )
 
-    # Convert the list to a DataFrame
+    # Create a DataFrame from the collected data
     df = pd.DataFrame(data)
 
+    # Define the output CSV file path
+    csv_path = os.path.join(env_var, 'dataset_info.csv')
+
     # Save the DataFrame to a CSV file
-    df.to_csv(os.path.join(env_var, 'dataset_info.csv'), index=False)
-
-
+    try:
+        df.to_csv(csv_path, index=False)
+        logging.info(f"CSV file generated successfully: {csv_path}")
+    except Exception as e:
+        logging.error(f"Failed to save CSV: {e}")
 
 
 
