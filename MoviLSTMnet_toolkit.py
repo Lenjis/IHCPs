@@ -7,21 +7,13 @@ import logging
 
 def csv_generator(env_var):
     """
-    Generates a CSV file containing information about input and output folder pairs 
-    within a given environment directory. 
-
-    Args:
-        env_var (str): The base directory path containing 'input' and 'output' subdirectories.
-
-    Returns:
-        None. A CSV file named 'dataset_info.csv' will be created in the base directory.
+    Generates a CSV file containing information about input and output folder pairs.
     """
+    import logging
 
-    # Configure logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s'
-    )
+    # Set specific logger for this function
+    logger = logging.getLogger()
+    logger.setLevel(logging.WARNING)  # 强制设置级别为 WARNING
 
     # Define input and output directory paths
     input_path = os.path.join(env_var, 'input')
@@ -41,7 +33,7 @@ def csv_generator(env_var):
 
         # Check if corresponding input and output folders exist
         if os.path.isdir(input_folder) and os.path.isdir(output_folder):
-            logging.info(f"Processing folder: {folder_name}")
+            logging.info(f"Processing folder: {folder_name}")  # INFO 不会输出
             data.append({
                 'folder_name': folder_name,
                 'input_folder': input_folder,
@@ -62,7 +54,7 @@ def csv_generator(env_var):
     # Save the DataFrame to a CSV file
     try:
         df.to_csv(csv_path, index=False)
-        logging.info(f"CSV file generated successfully: {csv_path}")
+        logging.info(f"CSV file generated successfully: {csv_path}")  # INFO 不会输出
     except Exception as e:
         logging.error(f"Failed to save CSV: {e}")
 

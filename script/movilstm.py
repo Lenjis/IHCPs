@@ -63,7 +63,7 @@ def build_and_load_backbone():
     return backbone, backbone_freeze, backbone_initial, pretrained_model_1, pretrained_model_2, checkpoint_path
 
 
-def build_movilstm_model(backbone, material_name, heatflux_type):
+def build_movilstm_model(backbone, material_name, heatflux_type, case_number):
     """
     Build the MoviLSTM model based on a frozen backbone model.
 
@@ -100,7 +100,7 @@ def build_movilstm_model(backbone, material_name, heatflux_type):
     model = tf.keras.Model(
         inputs=backbone.inputs[0],
         outputs=decoder_outputs,
-        name=f'MoviLSTM_freeze_{material_name}_{heatflux_type}'
+        name=f'MoviLSTM_freeze_{material_name}_{heatflux_type}_{case_number}'
     )
     
     # Compile the model
