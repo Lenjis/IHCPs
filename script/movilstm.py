@@ -111,3 +111,152 @@ def build_movilstm_model(backbone, material_name, heatflux_type, case_number):
     )
     
     return model
+
+def build_convlstm_model(input_shape, material_name, heatflux_type, case_number):
+    """
+    Build a ConvLSTM model for spatiotemporal data processing.
+
+    Parameters:
+        input_shape (tuple): Shape of the input tensor (time_steps, height, width, channels).
+        model_name (str): Name of the model.
+
+    Returns:
+        tf.keras.Model: The compiled ConvLSTM model.
+    """
+    # Define the input
+    inputs = tf.keras.Input(shape=input_shape, name='input_layer')
+
+    # Add ConvLSTM2D layers
+    x = tf.keras.layers.ConvLSTM2D(filters=16, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(inputs)
+    x = tf.keras.layers.ConvLSTM2D(filters=32, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=64, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=64, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=32, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=16, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+
+    # Final output layer
+    outputs = tf.keras.layers.ConvLSTM2D(filters=3, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+
+    # Create the model
+    model = tf.keras.Model(
+        inputs=inputs, 
+        outputs=outputs, 
+        name=f'ConvLSTM_{material_name}_{heatflux_type}_{case_number}'
+        )
+
+    # Compile the model
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(),
+        loss='mean_squared_error',
+        metrics=[tf.keras.metrics.RootMeanSquaredError()]
+    )
+    
+    return model
+
+def build_convlstm_model_9(input_shape, material_name, heatflux_type, case_number):
+    """
+    Build a ConvLSTM model for spatiotemporal data processing.
+
+    Parameters:
+        input_shape (tuple): Shape of the input tensor (time_steps, height, width, channels).
+        model_name (str): Name of the model.
+
+    Returns:
+        tf.keras.Model: The compiled ConvLSTM model.
+    """
+    # Define the input
+    inputs = tf.keras.Input(shape=input_shape, name='input_layer')
+
+    # Add ConvLSTM2D layers
+    x = tf.keras.layers.ConvLSTM2D(filters=16, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(inputs)
+    x = tf.keras.layers.ConvLSTM2D(filters=32, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=64, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=128, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=64, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=32, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+    x = tf.keras.layers.ConvLSTM2D(filters=16, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+
+    # Final output layer
+    outputs = tf.keras.layers.ConvLSTM2D(filters=3, kernel_size=(3, 3), padding='same', activation='relu', return_sequences=True)(x)
+
+    # Create the model
+    model = tf.keras.Model(
+        inputs=inputs, 
+        outputs=outputs, 
+        name=f'ConvLSTM_{material_name}_{heatflux_type}_{case_number}'
+        )
+
+    # Compile the model
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(),
+        loss='mean_squared_error',
+        metrics=[tf.keras.metrics.RootMeanSquaredError()]
+    )
+    
+    return model
+
+def build_c3d_convlstm2d(input_shape, 
+                        filters=[16, 32, 64, 32, 16, 3], 
+                        kernel_sizes=[(3, 3, 3), (3, 3, 3), (3, 3), (3, 3), (3, 3), (3, 3)], 
+                        padding='same', 
+                        activation='relu', 
+                        optimizer='adam', 
+                        loss='mean_squared_error', 
+                        metrics=['mean_squared_error']):
+    """
+    Build a Conv3D + ConvLSTM2D model.
+
+    Args:
+        input_shape (tuple): Input shape (time_steps, height, width, channels).
+        filters (list): List of filters for Conv3D and ConvLSTM2D layers.
+        kernel_sizes (list): List of kernel sizes for Conv3D and ConvLSTM2D layers.
+        padding (str): Padding for all layers (default is 'same').
+        activation (str): Activation function for all layers (default is 'relu').
+        optimizer (str): Optimizer for model compilation.
+        loss (str): Loss function for model compilation.
+        metrics (list): List of metrics for model compilation.
+
+    Returns:
+        tf.keras.Model: Compiled TensorFlow model.
+    """
+    # Input layer
+    inputs = tf.keras.Input(shape=input_shape)
+    
+    # Conv3D layer
+    x = tf.keras.layers.Conv3D(filters=filters[0], kernel_size=kernel_sizes[0], 
+                               padding=padding, activation=activation)(inputs)
+    
+    # Additional Conv3D layer
+    x = tf.keras.layers.Conv3D(filters=filters[1], kernel_size=kernel_sizes[1], 
+                               padding=padding, activation=activation)(x)
+    
+    # ConvLSTM2D layers
+    x = tf.keras.layers.ConvLSTM2D(filters=filters[2], kernel_size=kernel_sizes[2], 
+                                   padding=padding, activation=activation, return_sequences=True)(x)
+    
+    x = tf.keras.layers.ConvLSTM2D(filters=filters[3], kernel_size=kernel_sizes[3], 
+                                   padding=padding, activation=activation, return_sequences=True)(x)
+    
+    x = tf.keras.layers.ConvLSTM2D(filters=filters[4], kernel_size=kernel_sizes[4], 
+                                   padding=padding, activation=activation, return_sequences=True)(x)
+    
+    # Final ConvLSTM2D layer
+    outputs = tf.keras.layers.ConvLSTM2D(filters=filters[5], kernel_size=kernel_sizes[5], 
+                                         padding=padding, activation=activation, return_sequences=True)(x)
+    
+    # Model definition
+    model = tf.keras.Model(inputs=inputs, outputs=outputs, name='C3DConvLSTM2D')
+    
+    # Compile the model
+    model.compile(optimizer=tf.keras.optimizers.get(optimizer), 
+                  loss=loss, 
+                  metrics=metrics)
+    
+    return model
