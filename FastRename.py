@@ -35,7 +35,7 @@ def RemoveIndex(path="./"):
         for filename in os.listdir(path):
             match = re.search(pattern, filename)
             if match:
-                newname = filename.replace(match.group(), "")
+                newname = filename.replace(match.group(), "", 1)
                 os.rename(os.path.join(path, filename), os.path.join(path, newname))
         print("All indexes removed.")
     except Exception as e:
